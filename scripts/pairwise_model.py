@@ -89,6 +89,7 @@ class RankingAgent:
                 label = get_ranking(self.user_dataset[i][0], self.user_dataset[j][0])
                 training_pairs.append((self.user_dataset[i][1], self.user_dataset[j][1], label))
         # update the model according to rankings
+        num_posts = 0
         for pair in training_pairs:
             feature_1 = pair[0]
             feature_2 = pair[1]
@@ -100,6 +101,7 @@ class RankingAgent:
             self.optimizer.step()
             self.user_dataset = []
             self.loss += loss.item()
+        self.loss = self.loss/num_posts
         return True
 
     def predict_ranking(self, feature_1, feature_2):
