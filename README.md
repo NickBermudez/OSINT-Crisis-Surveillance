@@ -17,7 +17,7 @@ Additional files include:
 -A Telegram pandas DataFrame saved as a pickle file, which can be regenerated using the notebooks in the scripts folder.
 Scripts
 
-scripts
+'scripts' folder
 -------------------------
 bandit_model_visualizations.ipynb
 Contains the contextual bandit model, training, and visualizations of its performance. (Note: This model was not modularized due to suboptimal NDCG performance.)
