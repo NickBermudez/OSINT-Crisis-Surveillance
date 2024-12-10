@@ -2,5 +2,5 @@ torch
 pandas
 sentence_transformers
 streamlit
-psycopg2-binary
+psycopg2-binary==2.9.6
 
