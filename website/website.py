@@ -9,7 +9,9 @@ from sentence_transformers import SentenceTransformer
 
 POSTGRES_DB = "telegram"
 TABLE_NAME = "messages"
-
+POSTGRES_HOST = st.secrets["postgres"]["host"]
+POSTGRES_USER = st.secrets["postgres"]["user"]
+POSTGRES_PASSWORD = st.secrets["postgres"]["password"]
 if 'telegram_df' not in st.session_state:
     conn = psycopg2.connect(
         host=POSTGRES_HOST,
