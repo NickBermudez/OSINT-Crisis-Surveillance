@@ -7,9 +7,6 @@ import pandas as pd
 import psycopg2
 from sentence_transformers import SentenceTransformer
 
-POSTGRES_HOST = "tg-database.cjdohyca03zz.us-west-1.rds.amazonaws.com"
-POSTGRES_USER = "partner_user"
-POSTGRES_PASSWORD = "StrongPassword123!"
 POSTGRES_DB = "telegram"
 TABLE_NAME = "messages"
 
