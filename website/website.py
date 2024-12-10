@@ -33,7 +33,7 @@ if 'telegram_df' not in st.session_state:
     st.success('Data loaded successfully!')
 
 if 'embeddings' not in st.session_state:
-    with st.spinner('Generating SBERT embeddings...'):
+    with st.spinner('Generating SBERT embeddings. This may take a while...'):
         model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
         st.session_state.embeddings = []
         for i in range(len(st.session_state.telegram_df)):
