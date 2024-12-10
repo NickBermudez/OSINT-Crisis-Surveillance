@@ -42,8 +42,12 @@ Contains the code to locally run a demo version of our app
 Recommended Setup
 -------------------------
 -Download the dataset files from the provided Google Drive link and extract the contents into a folder named 'data'.
+
 -Place the scripts into a separate folder named 'scripts'.
+
 -Use the Jupyter notebooks in the scripts folder to generate embeddings, create dataframes, and train models.
+
 -Make a copy of pairwise_model.py and place it in the same directory as website.py
+
 -To run website.py locally, navigate to its directory and run the following command: streamlit run website.py 
       
