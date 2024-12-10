@@ -37,7 +37,8 @@ Trains the pairwise ranking model through hyperparameter tuning and generates pe
 'website' folder
 -------------------------
 website.py
-Contains the code to locally run a demo version of our app
+Contains the code streamlit uses to run the app
+the streamlit link is https://kaizen.streamlit.app/
 
 Recommended Setup
 -------------------------
