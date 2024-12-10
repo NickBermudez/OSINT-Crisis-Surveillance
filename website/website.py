@@ -12,32 +12,36 @@ TABLE_NAME = "messages"
 POSTGRES_HOST = st.secrets["postgres"]["host"]
 POSTGRES_USER = st.secrets["postgres"]["user"]
 POSTGRES_PASSWORD = st.secrets["postgres"]["password"]
-if 'telegram_df' not in st.session_state:
-    conn = psycopg2.connect(
-        host=POSTGRES_HOST,
-        user=POSTGRES_USER,
-        password=POSTGRES_PASSWORD,
-        dbname=POSTGRES_DB
-    )
-    cursor = conn.cursor()
-    query = f"SELECT * FROM {TABLE_NAME};"
-    cursor.execute(query)
 
-    rows = cursor.fetchall()
-    column_names = [desc[0] for desc in cursor.description]
-    st.session_state.telegram_df = pd.DataFrame(rows, columns=column_names)
-    cursor.close()
-    conn.close()
+if 'telegram_df' not in st.session_state:
+    with st.spinner('Loading data from database...'):
+        conn = psycopg2.connect(
+            host=POSTGRES_HOST,
+            user=POSTGRES_USER,
+            password=POSTGRES_PASSWORD,
+            dbname=POSTGRES_DB
+        )
+        cursor = conn.cursor()
+        query = f"SELECT * FROM {TABLE_NAME};"
+        cursor.execute(query)
+    
+        rows = cursor.fetchall()
+        column_names = [desc[0] for desc in cursor.description]
+        st.session_state.telegram_df = pd.DataFrame(rows, columns=column_names)
+        cursor.close()
+        conn.close()
+     st.success('Data loaded successfully!')
 
 if 'embeddings' not in st.session_state:
-    model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
-    st.session_state.embeddings = []
-    for i in range(len(st.session_state.telegram_df)):
-        row = st.session_state.telegram_df.iloc[i]
-        text = row['message_text']
-        embedding = model.encode(text)
-        st.session_state.embeddings.append(embedding)
-
+    with st.spinner('Generating SBERT embeddings...'):
+        model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
+        st.session_state.embeddings = []
+        for i in range(len(st.session_state.telegram_df)):
+            row = st.session_state.telegram_df.iloc[i]
+            text = row['message_text']
+            embedding = model.encode(text)
+            st.session_state.embeddings.append(embedding)
+        st.success('Embeddings generated successfully!')
 if 'agent' not in st.session_state:
     try:
         with open('best_pairwise_model.pkl', 'rb') as file:
