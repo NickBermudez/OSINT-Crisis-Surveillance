@@ -12,7 +12,9 @@ transformers == 4.45.1
 spacy == 3.7.2
 nltk == 3.9.1
 json == 2.0.9
-
+streamlit == 1.40.2
+psycopg2 == 2.9.10 (dt dec pq3 ext lo64)
+sentence_transformers == 3.31
 
 
 
