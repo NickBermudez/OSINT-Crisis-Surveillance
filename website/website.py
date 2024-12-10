@@ -92,10 +92,10 @@ def handle_button_click(j, idx, i):
 
 
 if len(st.session_state.agent.user_dataset) % 15 == 0:
-    st.markdown("### Model update in progress: Selecting new posts...")
-    selected_posts = rank(filtered_tensors, filtered_indices)
-    st.session_state.posts = [(idx, st.session_state.telegram_df['message_text'][idx],
-                               st.session_state.telegram_df['created_at'][idx]) for idx in selected_posts]
+    with st.spinner('Model update in progress: Selecting new posts...'):
+        selected_posts = rank(filtered_tensors, filtered_indices)
+        st.session_state.posts = [(idx, st.session_state.telegram_df['message_text'][idx],
+                                   st.session_state.telegram_df['created_at'][idx]) for idx in selected_posts]
 
 num_posts = min(10, len(st.session_state.posts))
 for i in range(num_posts):
