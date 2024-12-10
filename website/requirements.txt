@@ -3,4 +3,4 @@ pandas
 sentence_transformers
 streamlit
 psycopg2-binary
-psycopg2
+
