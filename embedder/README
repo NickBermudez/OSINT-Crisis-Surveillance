@@ -1,0 +1,134 @@
+# Embedding Pipeline
+
+This repository contains a Python script (`embedder.py`) that fetches new messages from a PostgreSQL database, generates Sentence-BERT (SBERT) embeddings for them, and updates the database with the generated embeddings. It is designed to integrate into a broader OSINT analysis pipeline where data is scraped from Telegram, embedded, and eventually fed to a ranking model.
+
+## Features
+
+- **Automated Embedding Generation**:  
+  Automatically retrieves messages that lack embeddings from the database and generates embeddings using SBERT.
+
+- **GPU Acceleration (Optional)**:  
+  If a CUDA-enabled GPU is available, the model runs on the GPU for faster inference. Otherwise, it gracefully falls back to CPU.
+
+- **Batch Processing**:  
+  Encodes messages in batches for efficiency, reducing overhead in large-scale embedding tasks.
+
+- **Database Integration**:  
+  Connects to the PostgreSQL database using credentials from a `.env` file (or environment variables), reads unembedded messages, and updates their embeddings in-place.
+
+## Prerequisites
+
+- **Python 3.9+** (recommended)
+- **PostgreSQL Database**:  
+  Accessible database with a `messages` table that includes `id`, `message_text`, and `embedding` columns.
+
+  **Example schema snippet:**
+  ```sql
+  CREATE EXTENSION IF NOT EXISTS vector;
+
+  CREATE TABLE IF NOT EXISTS messages (
+      id SERIAL PRIMARY KEY,
+      message_text TEXT,
+      embedding vector(384)
+  );
+
+	•	CUDA Support (Optional):
+A GPU with CUDA drivers installed if you want GPU acceleration.
+
+## Installation
+
+	1.	Clone this repository:
+
+```
+cd embedding
+```
+
+
+	2.	Create a virtual environment (optional):
+
+```
+python3 -m venv venv
+source venv/bin/activate
+```
+
+
+	3.	Install Dependencies:
+
+```
+pip install -r requirements.txt
+```
+
+Ensure psycopg2-binary, python-dotenv, pandas, sqlalchemy, and sentence-transformers are installed.
+A sample requirements.txt might include:
+
+```
+psycopg2-binary
+python-dotenv
+pandas
+sqlalchemy
+sentence-transformers
+```
+
+
+
+## Configuration
+	1.	.env File:
+Create a .env file in the project root with your database credentials:
+
+```
+POSTGRES_HOST=mydb.xxxxx.us-east-1.rds.amazonaws.com
+POSTGRES_DB=mydatabase
+POSTGRES_USER=myuser
+POSTGRES_PASSWORD=mypassword
+```
+
+	2.	GPU Configuration (Optional):
+If you have a GPU, no extra steps are needed. The script attempts to use device='cuda'. If no GPU is available, it falls back to CPU.
+
+## Usage
+
+Run the embedder:
+
+python embedder.py
+
+What it does:
+	•	Loads environment variables from .env.
+	•	Connects to the database and retrieves messages where embedding IS NULL.
+	•	Uses SBERT to generate embeddings in batches.
+	•	Updates the embedding column in the database for those messages.
+
+If no new messages require embeddings, it prints:
+
+No new messages to embed.
+
+If embeddings are generated and updated, it prints something like:
+
+Updated 100 messages with embeddings.
+
+## Troubleshooting
+
+	•	Missing Environment Variables:
+
+Ensure .env is present and contains all required variables. If you see a message about missing variables, double-check .env.
+
+	•	CUDA Not Available:
+
+If you receive a CUDA-related error, ensure GPU drivers and CUDA are installed. Otherwise, remove the try/except block in the code or explicitly set device='cpu' in the model initialization.
+
+	•	Database Connectivity Issues:
+If you cannot connect to the database, verify that POSTGRES_HOST and other credentials are correct, and check network/firewall configurations.
+
+## Integration with Other Pipelines
+
+This embedder script fits into a larger pipeline:
+	•	Scraper: Fetches raw messages from Telegram into the database.
+	•	Embedder (this script): Updates messages with embeddings.
+	•	Ranking Model: Consumes embeddings from the database and produces ranked results.
+	•	Dashboard: Visualizes ranked messages and insights for OSINT analysts.
+
+License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+
+
