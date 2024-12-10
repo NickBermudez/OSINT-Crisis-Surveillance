@@ -30,7 +30,7 @@ if 'telegram_df' not in st.session_state:
         st.session_state.telegram_df = pd.DataFrame(rows, columns=column_names)
         cursor.close()
         conn.close()
-     st.success('Data loaded successfully!')
+    st.success('Data loaded successfully!')
 
 if 'embeddings' not in st.session_state:
     with st.spinner('Generating SBERT embeddings...'):
@@ -42,6 +42,7 @@ if 'embeddings' not in st.session_state:
             embedding = model.encode(text)
             st.session_state.embeddings.append(embedding)
         st.success('Embeddings generated successfully!')
+        
 if 'agent' not in st.session_state:
     try:
         with open('best_pairwise_model.pkl', 'rb') as file:
