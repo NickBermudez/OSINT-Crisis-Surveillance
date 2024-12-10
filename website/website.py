@@ -40,8 +40,11 @@ if 'embeddings' not in st.session_state:
         st.session_state.embeddings.append(embedding)
 
 if 'agent' not in st.session_state:
-    with open('best_pairwise_model', 'rb') as file:
-        pretrained_model = pickle.load(file)
+    try:
+        with open('best_pairwise_model.pkl', 'rb') as file:
+            pretrained_model = pickle.load(file)
+    except:
+        pretrained_model = None
     st.session_state.agent = RankingAgent(pretrained_model=pretrained_model)
 
 if 'used_indices' not in st.session_state:
